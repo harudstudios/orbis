@@ -1,22 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+
+const subscribe = () => () => {};
+const getSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 export function NeonCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const cursorTrailRef = useRef<HTMLDivElement>(null);
   const [isPointer, setIsPointer] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+  const isMounted = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   useEffect(() => {
-    setIsMounted(true);
-
-    // Add cursor hiding class to body
     document.body.classList.add("landing-cursor-hidden");
-
     return () => {
-      // Remove cursor hiding class when unmounting
       document.body.classList.remove("landing-cursor-hidden");
     };
   }, []);
@@ -44,8 +43,8 @@ export function NeonCursor() {
       const isClickable =
         target.tagName === "A" ||
         target.tagName === "BUTTON" ||
-        target.closest("a") ||
-        target.closest("button") ||
+        !!target.closest("a") ||
+        !!target.closest("button") ||
         window.getComputedStyle(target).cursor === "pointer";
       setIsPointer(isClickable);
     };

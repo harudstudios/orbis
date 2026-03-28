@@ -60,7 +60,7 @@ export function Sidebar() {
           className={`shrink-0 border-b border-sidebar-border flex items-center ${collapsed ? "justify-center p-2" : "justify-between p-3"}`}
         >
           {!collapsed && (
-            <Link href="/map" className="flex items-center pl-1 min-w-0">
+            <Link href="/" className="flex items-center pl-1 min-w-0">
               <Image
                 src={
                   theme === "dark"
