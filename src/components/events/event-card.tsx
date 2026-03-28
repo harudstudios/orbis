@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { TrustBadge } from "./trust-badge";
+import { FavoriteButton } from "./favorite-button";
 import { CATEGORIES } from "@/config/categories";
 import type { EventCategory } from "@/config/categories";
 
@@ -28,7 +29,7 @@ export function EventCard({
       className={`bg-card border border-border rounded-xl transition-all hover:border-ring/30 hover:shadow-md cursor-pointer ${compact ? "p-3" : "p-4"}`}
       onClick={onClick}
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1.5">
             <span
@@ -43,7 +44,10 @@ export function EventCard({
           <h3 className={`font-semibold leading-snug ${compact ? "text-sm" : "text-[15px]"}`}>{title}</h3>
           {!compact && <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{description}</p>}
         </div>
-        <TrustBadge score={trustScore} size={compact ? "sm" : "md"} />
+        <div className="flex items-center gap-1.5 shrink-0">
+          <FavoriteButton eventId={id} size={compact ? "sm" : "md"} />
+          <TrustBadge score={trustScore} size={compact ? "sm" : "md"} />
+        </div>
       </div>
       <div className="flex items-center gap-3 mt-3 text-xs text-muted-foreground">
         <span className="flex items-center gap-1">

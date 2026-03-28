@@ -45,14 +45,10 @@ export const insert = mutation({
       fetchedAt: Date.now(),
     });
 
-    // Increment the event's article count and recalculate trust
     const event = await ctx.db.get(args.eventId);
     if (event) {
-      const articlesCount = event.articlesCount + 1;
-      const trustScore = event.reportsCount + articlesCount * 2;
       await ctx.db.patch(args.eventId, {
-        articlesCount,
-        trustScore,
+        articlesCount: event.articlesCount + 1,
         updatedAt: Date.now(),
       });
     }
@@ -91,14 +87,10 @@ export const bulkInsert = mutation({
       ids.push(id);
     }
 
-    // Update event article count and trust score
     const event = await ctx.db.get(args.eventId);
     if (event) {
-      const articlesCount = event.articlesCount + args.articles.length;
-      const trustScore = event.reportsCount + articlesCount * 2;
       await ctx.db.patch(args.eventId, {
-        articlesCount,
-        trustScore,
+        articlesCount: event.articlesCount + args.articles.length,
         updatedAt: Date.now(),
       });
     }

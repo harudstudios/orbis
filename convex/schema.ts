@@ -65,6 +65,14 @@ export default defineSchema({
     .index("by_trust", ["aggregateTrustScore"])
     .index("by_created", ["createdAt"]),
 
+  favorites: defineTable({
+    userId: v.string(),
+    eventId: v.id("events"),
+    createdAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_event", ["userId", "eventId"]),
+
   articles: defineTable({
     eventId: v.id("events"),
     clusterId: v.optional(v.id("clusters")),

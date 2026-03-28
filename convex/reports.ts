@@ -32,14 +32,13 @@ export const submit = mutation({
       createdAt: Date.now(),
     });
 
-    // Increment event's report count and recalculate trust
+    // Increment event's report count — trust = reportsCount only
     const event = await ctx.db.get(args.eventId);
     if (event) {
       const reportsCount = event.reportsCount + 1;
-      const trustScore = reportsCount + event.articlesCount * 2;
       await ctx.db.patch(args.eventId, {
         reportsCount,
-        trustScore,
+        trustScore: reportsCount,
         updatedAt: Date.now(),
       });
     }

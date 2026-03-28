@@ -1,6 +1,6 @@
 import { getGeminiClient } from "./client";
 
-const MODEL = "gemini-2.5-flash-preview-04-17";
+const MODEL = "gemini-2.5-flash";
 
 interface NormalizedEvent {
   title: string;
@@ -18,7 +18,10 @@ export async function normalizeEventInput(
   const client = getGeminiClient();
   const model = client.getGenerativeModel({
     model: MODEL,
-    generationConfig: { temperature: 0.2, responseMimeType: "application/json" },
+    generationConfig: {
+      temperature: 0.2,
+      responseMimeType: "application/json",
+    },
   });
 
   const prompt = `You are a news normalization engine. Given raw user-reported text about a real-world event, produce a clean structured version. Return JSON with these fields:

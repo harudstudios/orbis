@@ -91,9 +91,9 @@ export const create = mutation({
       longitude: args.longitude,
       category: args.category,
       clusterId: args.clusterId,
-      reportsCount: 1,
+      reportsCount: 0,
       articlesCount: 0,
-      trustScore: 1,
+      trustScore: 0,
       status: "active",
       summary: args.summary,
       userId: args.userId,
@@ -127,12 +127,8 @@ export const incrementArticlesCount = mutation({
     const event = await ctx.db.get(args.id);
     if (!event) throw new Error("Event not found");
 
-    const articlesCount = event.articlesCount + 1;
-    const trustScore = event.reportsCount + articlesCount * 2;
-
     await ctx.db.patch(args.id, {
-      articlesCount,
-      trustScore,
+      articlesCount: event.articlesCount + 1,
       updatedAt: Date.now(),
     });
   },

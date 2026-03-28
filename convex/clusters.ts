@@ -57,7 +57,7 @@ export const create = mutation({
       centerLongitude: args.centerLongitude,
       radius: args.radius,
       eventCount: 1,
-      aggregateTrustScore: 1,
+      aggregateTrustScore: 0,
       createdAt: now,
       updatedAt: now,
     });

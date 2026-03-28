@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useActiveEvents } from "@/hooks/use-events";
 import { TrustBadge } from "@/components/events/trust-badge";
+import { FavoriteButton } from "@/components/events/favorite-button";
 import { CATEGORIES, CATEGORY_LIST, type EventCategory } from "@/config/categories";
 import { haversineDistance } from "@/lib/utils/geo";
 
@@ -269,7 +270,10 @@ function ZoneEventCard({ event }: { event: any }) {
             <h3 className="text-sm sm:text-[15px] font-semibold leading-snug">{event.title}</h3>
             <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-2">{event.description}</p>
           </div>
-          <TrustBadge score={event.trustScore} size="md" />
+          <div className="flex items-center gap-1.5 shrink-0">
+            <FavoriteButton eventId={event._id} size="sm" />
+            <TrustBadge score={event.trustScore} size="md" />
+          </div>
         </div>
       </Link>
 

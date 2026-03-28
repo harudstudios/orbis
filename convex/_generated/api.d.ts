@@ -11,6 +11,7 @@
 import type * as articles from "../articles.js";
 import type * as clusters from "../clusters.js";
 import type * as events from "../events.js";
+import type * as favorites from "../favorites.js";
 import type * as reports from "../reports.js";
 
 import type {
@@ -23,6 +24,7 @@ declare const fullApi: ApiFromModules<{
   articles: typeof articles;
   clusters: typeof clusters;
   events: typeof events;
+  favorites: typeof favorites;
   reports: typeof reports;
 }>;
 

@@ -4,6 +4,7 @@ import { use, useState } from "react";
 import Link from "next/link";
 import { useEvent } from "@/hooks/use-events";
 import { TrustBadge, TrustBar } from "@/components/events/trust-badge";
+import { FavoriteButton } from "@/components/events/favorite-button";
 import { CATEGORIES, type EventCategory } from "@/config/categories";
 
 export default function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -84,7 +85,10 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
               <p className="text-sm text-foreground/80 mt-3 italic border-l-2 border-primary/30 pl-3">{event.summary}</p>
             )}
           </div>
-          <TrustBadge score={event.trustScore} size="lg" />
+          <div className="flex items-center gap-2 shrink-0">
+            <FavoriteButton eventId={id} size="md" />
+            <TrustBadge score={event.trustScore} size="lg" />
+          </div>
         </div>
         <div className="mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-border">
           <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs sm:text-sm text-muted-foreground mb-3">

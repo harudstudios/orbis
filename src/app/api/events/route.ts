@@ -195,6 +195,9 @@ export async function POST(request: NextRequest) {
       eventId,
     });
 
+    // Recalculate cluster aggregate trust
+    await convex.mutation(api.clusters.recalculateTrust, { id: clusterId });
+
     return NextResponse.json({
       action: "event_created",
       eventId,

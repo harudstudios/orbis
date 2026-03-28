@@ -19,7 +19,6 @@ export async function GET(
   try {
     const convex = getConvexClient();
 
-    // Get the event first
     const event = await convex.query(api.events.getById, {
       id: eventId as any,
     });
@@ -28,7 +27,6 @@ export async function GET(
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
-    // Check for existing articles
     const existingArticles = await convex.query(api.articles.listByEvent, {
       eventId: eventId as any,
     });
@@ -37,7 +35,6 @@ export async function GET(
       return NextResponse.json({ articles: existingArticles, cached: true });
     }
 
-    // Scrape Google News via Apify
     const query = buildNewsQuery(event.title, event.category, event.description);
     const scraped = await scrapeGoogleNews(query, 10);
 
@@ -45,7 +42,6 @@ export async function GET(
       return NextResponse.json({ articles: existingArticles, cached: true });
     }
 
-    // Store articles in Convex
     const articlesToInsert = scraped.map((article) => ({
       url: article.url,
       headline: article.headline,
@@ -60,7 +56,6 @@ export async function GET(
       articles: articlesToInsert,
     });
 
-    // Fetch the updated list
     const updatedArticles = await convex.query(api.articles.listByEvent, {
       eventId: eventId as any,
     });

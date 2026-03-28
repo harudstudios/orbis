@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useState, useRef, useEffect } from "react";
 import { useTheme } from "@/hooks/use-theme";
 import { useSidebarStore } from "@/store/sidebar-store";
+import { useAuthStore } from "@/store/auth-store";
 
 const NAV_ITEMS = [
   { href: "/map", label: "Map", icon: MapIcon },
@@ -16,12 +19,26 @@ export function Sidebar() {
   const { theme, toggleTheme } = useTheme();
   const collapsed = useSidebarStore((s) => s.collapsed);
   const toggle = useSidebarStore((s) => s.toggle);
+  const user = useAuthStore((s) => s.user);
+  const signOut = useAuthStore((s) => s.signOut);
+  const [showProfile, setShowProfile] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   const isSettingsActive = pathname === "/settings" || pathname.startsWith("/settings/");
+  const isFavoritesActive = pathname === "/favorites";
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setShowProfile(false);
+      }
+    }
+    if (showProfile) document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [showProfile]);
 
   return (
     <>
-      {/* Mobile overlay backdrop */}
       {!collapsed && (
         <div
           className="fixed inset-0 bg-black/40 z-[999] md:hidden"
@@ -34,7 +51,7 @@ export function Sidebar() {
           collapsed ? "w-[56px]" : "w-[220px]"
         } ${collapsed ? "" : "max-md:fixed max-md:left-0 max-md:top-0 max-md:bottom-0 max-md:shadow-2xl"}`}
       >
-        {/* Top: logo + expand/collapse */}
+        {/* Top: logo + collapse */}
         <div className={`shrink-0 border-b border-sidebar-border flex items-center ${collapsed ? "justify-center p-2" : "justify-between p-3"}`}>
           {!collapsed && (
             <Link href="/map" className="flex items-center gap-2.5 pl-1 min-w-0">
@@ -44,7 +61,6 @@ export function Sidebar() {
               <span className="text-lg font-semibold tracking-tight text-sidebar-foreground truncate">Orbis</span>
             </Link>
           )}
-
           <button
             onClick={toggle}
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -76,9 +92,27 @@ export function Sidebar() {
               </Link>
             );
           })}
+
+          {/* Favorites — only when logged in */}
+          {user && (
+            <Link
+              href="/favorites"
+              title={collapsed ? "Favorites" : undefined}
+              className={`flex items-center gap-3 rounded-lg text-sm font-medium transition-colors ${
+                collapsed ? "justify-center p-2.5" : "px-3 py-2.5"
+              } ${
+                isFavoritesActive
+                  ? "bg-sidebar-accent text-sidebar-primary"
+                  : "text-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent"
+              }`}
+            >
+              <HeartIcon active={isFavoritesActive} />
+              {!collapsed && "Favorites"}
+            </Link>
+          )}
         </nav>
 
-        {/* Bottom: settings, theme toggle, live */}
+        {/* Bottom */}
         <div className="shrink-0 border-t border-sidebar-border p-1.5 space-y-0.5">
           <Link
             href="/settings"
@@ -105,6 +139,77 @@ export function Sidebar() {
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
             {!collapsed && (theme === "dark" ? "Light Mode" : "Dark Mode")}
           </button>
+
+          {/* Login / Profile */}
+          <div className="relative" ref={profileRef}>
+            {user ? (
+              <>
+                <button
+                  onClick={() => setShowProfile(!showProfile)}
+                  title={collapsed ? user.displayName ?? "Profile" : undefined}
+                  className={`flex items-center gap-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent transition-colors w-full ${
+                    collapsed ? "justify-center p-2.5" : "px-3 py-2.5"
+                  }`}
+                >
+                  {user.photoURL ? (
+                    <Image
+                      src={user.photoURL}
+                      alt=""
+                      width={22}
+                      height={22}
+                      className="rounded-full shrink-0"
+                    />
+                  ) : (
+                    <div className="w-[22px] h-[22px] rounded-full bg-primary flex items-center justify-center shrink-0">
+                      <span className="text-primary-foreground text-[10px] font-bold">
+                        {(user.displayName ?? user.email ?? "U")[0].toUpperCase()}
+                      </span>
+                    </div>
+                  )}
+                  {!collapsed && (
+                    <span className="truncate">{user.displayName ?? user.email}</span>
+                  )}
+                </button>
+
+                {showProfile && (
+                  <div className={`absolute bottom-full mb-1 ${collapsed ? "left-0" : "left-1.5 right-1.5"} bg-card border border-border rounded-xl shadow-lg p-3 z-50 min-w-[180px]`}>
+                    <div className="flex items-center gap-2.5 mb-3">
+                      {user.photoURL ? (
+                        <Image src={user.photoURL} alt="" width={32} height={32} className="rounded-full" />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                          <span className="text-primary-foreground text-sm font-bold">
+                            {(user.displayName ?? "U")[0].toUpperCase()}
+                          </span>
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium truncate">{user.displayName}</p>
+                        <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => { signOut(); setShowProfile(false); }}
+                      className="w-full text-left px-3 py-2 text-sm text-red-500 hover:bg-muted rounded-lg transition-colors"
+                    >
+                      Sign out
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <Link
+                href="/login"
+                title={collapsed ? "Sign in" : undefined}
+                className={`flex items-center gap-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent transition-colors ${
+                  collapsed ? "justify-center p-2.5" : "px-3 py-2.5"
+                }`}
+              >
+                <UserIcon />
+                {!collapsed && "Sign in"}
+              </Link>
+            )}
+          </div>
 
           {!collapsed && (
             <div className="flex items-center gap-2 px-3 py-2 text-xs text-muted-foreground">
@@ -161,10 +266,26 @@ function ChartIcon({ active }: { active: boolean }) {
   );
 }
 
+function HeartIcon({ active }: { active: boolean }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill={active ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={active ? "text-sidebar-primary" : ""}>
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+    </svg>
+  );
+}
+
 function SettingsIcon({ active }: { active: boolean }) {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={active ? "text-sidebar-primary" : ""}>
       <circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+    </svg>
+  );
+}
+
+function UserIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
     </svg>
   );
 }
