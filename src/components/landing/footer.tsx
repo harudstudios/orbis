@@ -13,8 +13,8 @@ const footerLinks = {
     { label: "Settings", href: "/settings" },
   ],
   resources: [
-    { label: "GitHub Web", href: "#" },
-    { label: "GitHub App", href: "#" },
+    { label: "GitHub Web", href: "https://github.com/harudstudios/orbis" },
+    { label: "GitHub App", href: "https://github.com/harudstudios/orbis-app" },
   ],
   legal: [
     { label: "Privacy Policy", href: "/settings" },
@@ -84,6 +84,7 @@ export function Footer() {
                   <Link
                     href={link.href}
                     className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1"
+                    target="_blank"
                   >
                     {link.label}
                   </Link>
