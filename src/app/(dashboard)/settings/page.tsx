@@ -63,7 +63,7 @@ function TermsContent() {
       <p>Users may submit event reports through the Orbis mobile application. By submitting content, you represent that the information is truthful and accurate to the best of your knowledge. You grant Orbis a non-exclusive, worldwide license to use, process, and display your submissions.</p>
 
       <h3 className="text-sm sm:text-base font-medium text-foreground">4. Trust Score System</h3>
-      <p>Orbis employs a trust scoring mechanism based on corroboration from multiple user reports and external news sources. Trust scores are algorithmic and do not constitute verification of absolute truth. Users should exercise their own judgment when interpreting trust scores.</p>
+      <p>Orbis employs a trust scoring mechanism based solely on corroboration from multiple independent user reports. External news articles are displayed for context but do not affect trust scores. Trust scores are algorithmic and do not constitute verification of absolute truth. Users should exercise their own judgment when interpreting trust scores.</p>
 
       <h3 className="text-sm sm:text-base font-medium text-foreground">5. Prohibited Conduct</h3>
       <p>You agree not to: submit false or misleading information; attempt to manipulate trust scores; use automated systems to submit reports; or engage in any activity that disrupts the integrity of the platform.</p>
@@ -117,16 +117,19 @@ function AboutContent() {
       <p>Orbis is a decentralized intelligence system where users act as real-time sensors. People report events from the real world through a mobile app, and the system transforms these raw signals into structured, verified, and visual intelligence on a live map dashboard.</p>
 
       <h3 className="text-sm sm:text-base font-medium text-foreground mt-6">How It Works</h3>
-      <p>Users submit raw event reports via the Orbis mobile app. These reports are processed by AI (Gemini) to normalize and structure the information. The system then checks for similar existing events nearby — if found, the new report increases the trust score of the existing event cluster. If it&apos;s a new event, a fresh cluster is created.</p>
+      <p>Users submit raw event reports via the Orbis mobile app. These reports are processed by Google Gemini AI to normalize and structure the information. The system then checks for similar existing events nearby — if found, the new report increases the trust score of the existing event cluster. If it&apos;s a new event, a fresh cluster is created. Related news articles are also fetched from Google News via Apify to provide additional context.</p>
 
       <h3 className="text-sm sm:text-base font-medium text-foreground">Trust Score</h3>
-      <p>Every event has a trust score calculated as: <strong>Reports Count + (Articles Count x 2)</strong>. The more independent users corroborate an event and the more external news articles confirm it, the higher its trust score becomes. Events progress through trust levels: Low, Medium, High, and Verified.</p>
+      <p>Every event has a trust score equal to the <strong>number of independent user reports</strong>. Only real users reporting the same event from the mobile app can increase trust — external news articles are displayed for reference but do not affect the score. Events progress through trust levels: Low (0–3), Medium (4–9), High (10–19), and Verified (20+).</p>
+
+      <h3 className="text-sm sm:text-base font-medium text-foreground">Dashboard Features</h3>
+      <p>The web dashboard provides a live interactive map with location search, category filters, zoom controls, and hover-to-preview event popups. You can explore any zone on the map, search the web for related news via Exa, and browse related articles. Optionally sign in with Google to favorite events for quick access later.</p>
 
       <h3 className="text-sm sm:text-base font-medium text-foreground">Technology</h3>
-      <p>Orbis is built with Next.js, Convex (real-time database), Gemini (AI processing), Leaflet (maps), Exa (semantic search), and Apify (news scraping). The mobile app is built with Flutter.</p>
+      <p>Orbis is built with Next.js 16, Convex (real-time database), Google Gemini Flash 2.5 (AI normalization and clustering), Leaflet (maps), Exa (semantic web search), and Apify (Google News scraping). Authentication is handled by Firebase. The mobile app is built with Flutter.</p>
 
       <h3 className="text-sm sm:text-base font-medium text-foreground">One User, One Voice</h3>
-      <p>To maintain integrity, each user can only submit one report per event cluster. This prevents a single user from artificially inflating trust scores and ensures that high trust truly represents widespread corroboration.</p>
+      <p>To maintain integrity, each user can only submit one report per event cluster. This prevents a single user from artificially inflating trust scores and ensures that high trust truly represents widespread corroboration from independent sources.</p>
     </div>
   );
 }

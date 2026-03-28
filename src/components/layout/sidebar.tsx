@@ -24,12 +24,16 @@ export function Sidebar() {
   const [showProfile, setShowProfile] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
 
-  const isSettingsActive = pathname === "/settings" || pathname.startsWith("/settings/");
+  const isSettingsActive =
+    pathname === "/settings" || pathname.startsWith("/settings/");
   const isFavoritesActive = pathname === "/favorites";
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
-      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(e.target as Node)
+      ) {
         setShowProfile(false);
       }
     }
@@ -52,13 +56,22 @@ export function Sidebar() {
         } ${collapsed ? "" : "max-md:fixed max-md:left-0 max-md:top-0 max-md:bottom-0 max-md:shadow-2xl"}`}
       >
         {/* Top: logo + collapse */}
-        <div className={`shrink-0 border-b border-sidebar-border flex items-center ${collapsed ? "justify-center p-2" : "justify-between p-3"}`}>
+        <div
+          className={`shrink-0 border-b border-sidebar-border flex items-center ${collapsed ? "justify-center p-2" : "justify-between p-3"}`}
+        >
           {!collapsed && (
-            <Link href="/map" className="flex items-center gap-2.5 pl-1 min-w-0">
-              <div className="w-8 h-8 rounded-lg bg-sidebar-primary flex items-center justify-center shrink-0">
-                <span className="text-sidebar-primary-foreground font-bold text-sm">O</span>
-              </div>
-              <span className="text-lg font-semibold tracking-tight text-sidebar-foreground truncate">Orbis</span>
+            <Link href="/map" className="flex items-center pl-1 min-w-0">
+              <Image
+                src={
+                  theme === "dark"
+                    ? "/logos/light-logo.png"
+                    : "/logos/dark-logo.png"
+                }
+                alt="Orbis"
+                width={100}
+                height={28}
+                className="h-12 md:h-16 w-auto"
+              />
             </Link>
           )}
           <button
@@ -73,7 +86,8 @@ export function Sidebar() {
         {/* Nav */}
         <nav className="flex-1 p-1.5 space-y-0.5 overflow-y-auto">
           {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+            const isActive =
+              pathname === item.href || pathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.href}
@@ -131,7 +145,13 @@ export function Sidebar() {
 
           <button
             onClick={toggleTheme}
-            title={collapsed ? (theme === "dark" ? "Light mode" : "Dark mode") : undefined}
+            title={
+              collapsed
+                ? theme === "dark"
+                  ? "Light mode"
+                  : "Dark mode"
+                : undefined
+            }
             className={`flex items-center gap-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent transition-colors w-full ${
               collapsed ? "justify-center p-2.5" : "px-3 py-2.5"
             }`}
@@ -146,7 +166,9 @@ export function Sidebar() {
               <>
                 <button
                   onClick={() => setShowProfile(!showProfile)}
-                  title={collapsed ? user.displayName ?? "Profile" : undefined}
+                  title={
+                    collapsed ? (user.displayName ?? "Profile") : undefined
+                  }
                   className={`flex items-center gap-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-sidebar-foreground hover:bg-sidebar-accent transition-colors w-full ${
                     collapsed ? "justify-center p-2.5" : "px-3 py-2.5"
                   }`}
@@ -162,20 +184,32 @@ export function Sidebar() {
                   ) : (
                     <div className="w-[22px] h-[22px] rounded-full bg-primary flex items-center justify-center shrink-0">
                       <span className="text-primary-foreground text-[10px] font-bold">
-                        {(user.displayName ?? user.email ?? "U")[0].toUpperCase()}
+                        {(user.displayName ??
+                          user.email ??
+                          "U")[0].toUpperCase()}
                       </span>
                     </div>
                   )}
                   {!collapsed && (
-                    <span className="truncate">{user.displayName ?? user.email}</span>
+                    <span className="truncate">
+                      {user.displayName ?? user.email}
+                    </span>
                   )}
                 </button>
 
                 {showProfile && (
-                  <div className={`absolute bottom-full mb-1 ${collapsed ? "left-0" : "left-1.5 right-1.5"} bg-card border border-border rounded-xl shadow-lg p-3 z-50 min-w-[180px]`}>
+                  <div
+                    className={`absolute bottom-full mb-1 ${collapsed ? "left-0" : "left-1.5 right-1.5"} bg-card border border-border rounded-xl shadow-lg p-3 z-50 min-w-[180px]`}
+                  >
                     <div className="flex items-center gap-2.5 mb-3">
                       {user.photoURL ? (
-                        <Image src={user.photoURL} alt="" width={32} height={32} className="rounded-full" />
+                        <Image
+                          src={user.photoURL}
+                          alt=""
+                          width={32}
+                          height={32}
+                          className="rounded-full"
+                        />
                       ) : (
                         <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                           <span className="text-primary-foreground text-sm font-bold">
@@ -184,12 +218,19 @@ export function Sidebar() {
                         </div>
                       )}
                       <div className="min-w-0">
-                        <p className="text-sm font-medium truncate">{user.displayName}</p>
-                        <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                        <p className="text-sm font-medium truncate">
+                          {user.displayName}
+                        </p>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {user.email}
+                        </p>
                       </div>
                     </div>
                     <button
-                      onClick={() => { signOut(); setShowProfile(false); }}
+                      onClick={() => {
+                        signOut();
+                        setShowProfile(false);
+                      }}
                       className="w-full text-left px-3 py-2 text-sm text-red-500 hover:bg-muted rounded-lg transition-colors"
                     >
                       Sign out
@@ -225,15 +266,35 @@ export function Sidebar() {
 
 function MenuIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <line x1="3" y1="18" x2="21" y2="18" />
     </svg>
   );
 }
 
 function CollapseIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <polyline points="11 17 6 12 11 7" />
       <polyline points="18 17 13 12 18 7" />
     </svg>
@@ -242,33 +303,80 @@ function CollapseIcon() {
 
 function MapIcon({ active }: { active: boolean }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={active ? "text-sidebar-primary" : ""}>
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={active ? "text-sidebar-primary" : ""}
+    >
       <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
-      <line x1="8" y1="2" x2="8" y2="18" /><line x1="16" y1="6" x2="16" y2="22" />
+      <line x1="8" y1="2" x2="8" y2="18" />
+      <line x1="16" y1="6" x2="16" y2="22" />
     </svg>
   );
 }
 
 function ListIcon({ active }: { active: boolean }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={active ? "text-sidebar-primary" : ""}>
-      <line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" />
-      <line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" />
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={active ? "text-sidebar-primary" : ""}
+    >
+      <line x1="8" y1="6" x2="21" y2="6" />
+      <line x1="8" y1="12" x2="21" y2="12" />
+      <line x1="8" y1="18" x2="21" y2="18" />
+      <line x1="3" y1="6" x2="3.01" y2="6" />
+      <line x1="3" y1="12" x2="3.01" y2="12" />
+      <line x1="3" y1="18" x2="3.01" y2="18" />
     </svg>
   );
 }
 
 function ChartIcon({ active }: { active: boolean }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={active ? "text-sidebar-primary" : ""}>
-      <line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" />
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={active ? "text-sidebar-primary" : ""}
+    >
+      <line x1="18" y1="20" x2="18" y2="10" />
+      <line x1="12" y1="20" x2="12" y2="4" />
+      <line x1="6" y1="20" x2="6" y2="14" />
     </svg>
   );
 }
 
 function HeartIcon({ active }: { active: boolean }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill={active ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={active ? "text-sidebar-primary" : ""}>
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill={active ? "currentColor" : "none"}
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={active ? "text-sidebar-primary" : ""}
+    >
       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
     </svg>
   );
@@ -276,31 +384,78 @@ function HeartIcon({ active }: { active: boolean }) {
 
 function SettingsIcon({ active }: { active: boolean }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={active ? "text-sidebar-primary" : ""}>
-      <circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={active ? "text-sidebar-primary" : ""}
+    >
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
     </svg>
   );
 }
 
 function UserIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+      <circle cx="12" cy="7" r="4" />
     </svg>
   );
 }
 
 function SunIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="5" />
+      <line x1="12" y1="1" x2="12" y2="3" />
+      <line x1="12" y1="21" x2="12" y2="23" />
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+      <line x1="1" y1="12" x2="3" y2="12" />
+      <line x1="21" y1="12" x2="23" y2="12" />
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
     </svg>
   );
 }
 
 function MoonIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
     </svg>
   );

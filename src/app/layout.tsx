@@ -1,11 +1,44 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { ConvexClientProvider } from "@/lib/convex/provider";
 import "./globals.css";
-
 export const metadata: Metadata = {
   title: "Orbis — Real-Time Trust-Based Intelligence",
   description:
-    "Decentralized intelligence system that transforms real-world signals into a live, trust-based map of events.",
+    "People-powered AI news network. Citizens report events from the field, AI processes and verifies them, and you see real-time intelligence on a live map dashboard.",
+  generator: "Orbis",
+  keywords: [
+    "news",
+    "real-time",
+    "intelligence",
+    "citizen journalism",
+    "AI",
+    "map",
+    "events",
+  ],
+  icons: {
+    icon: [
+      {
+        url: "/icon-light-32x32.png",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/icon-dark-32x32.png",
+        media: "(prefers-color-scheme: dark)",
+      },
+      {
+        url: "/icon.svg",
+        type: "image/svg+xml",
+      },
+    ],
+    apple: "/apple-icon.png",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#1a1a1a" },
+  ],
 };
 
 export default function RootLayout({
@@ -17,7 +50,11 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin=""
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
