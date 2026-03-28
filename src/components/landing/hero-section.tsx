@@ -106,14 +106,19 @@ export function HeroSection() {
                 <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary/80 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Button>
             </Link>
-            <Button
-              variant="outline"
-              size="lg"
-              className="rounded-full px-8 h-14 text-base gap-2 border-primary/30 hover:border-primary/60 hover:bg-primary/5 transition-all"
+            <Link
+              href="https://www.boomshare.ai/shared/01KMV4MJRTY6A43ERDM9MZN75X"
+              target="_blank"
             >
-              <Play className="h-4 w-4" />
-              Watch Demo
-            </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="rounded-full px-8 h-14 text-base gap-2 border-primary/30 hover:border-primary/60 hover:bg-primary/5 transition-all"
+              >
+                <Play className="h-4 w-4" />
+                Watch Demo
+              </Button>
+            </Link>
           </div>
 
           {/* Stats */}
